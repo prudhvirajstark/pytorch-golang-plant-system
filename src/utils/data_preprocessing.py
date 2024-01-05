@@ -3,16 +3,16 @@ import json
 import os
 from datetime import datetime
 
-# Specify the directory path containing JSON files
+
 directory_path = r'../../sensors/data/raw'
 
-# Initialize lists to store extracted data
+
 timestamps = []
 moistures = []
 below_30 = []
 sensors = []
 
-# Iterate over each JSON file in the specified directory
+
 for filename in os.listdir(directory_path):
     if filename.endswith(".json"):
         file_path = os.path.join(directory_path, filename)
@@ -31,12 +31,24 @@ for filename in os.listdir(directory_path):
                 except json.JSONDecodeError as e:
                     print(f"Error decoding JSON in {file_path}: {e}")
 
-# Convert timestamp strings to datetime objects
 timestamps = [datetime.fromisoformat(ts) for ts in timestamps]
+
 
 # Extract additional features from timestamps
 day_of_week = [ts.weekday() for ts in timestamps]
 hour_of_day = [ts.hour for ts in timestamps]
+month = [ts.month for ts in timestamps]
+year = [ts.year for ts in timestamps]
+
+
+time_of_day_bins = []
+for hour in hour_of_day:
+    if 6 <= hour < 12:
+        time_of_day_bins.append('morning')
+    elif 12 <= hour < 18:
+        time_of_day_bins.append('afternoon')
+    else:
+        time_of_day_bins.append('evening')
 
 # Create a pandas DataFrame
 df = pd.DataFrame({
@@ -45,8 +57,13 @@ df = pd.DataFrame({
     'moisture': moistures,
     'below_30': below_30,
     'day_of_week': day_of_week,
-    'hour_of_day': hour_of_day
+    'hour_of_day': hour_of_day,
+    'month': month,
+    'year': year,
+    'time_of_day': time_of_day_bins
 })
 
 # Display the resulting DataFrame
 print(df)
+filename = f"../../sensors/data/processed/sensor_data_{datetime.now().date()}.csv"
+df.to_csv(filename, index=False)
