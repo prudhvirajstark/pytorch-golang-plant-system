@@ -1,4 +1,15 @@
+# Data pre  processing contains 3  steps
+
+#  1. Take the folder path where the json files (Each line with raw json object, seperated by a new line) are present
+#     load the data into into a data frame
+#
+#  2. Perform feature engineering and save the data into a combined csv file based on the date
+#
+#  3. read the csv data folder and combine all the csv files into a single data frame
+
+
 import pandas as pd
+from sklearn.model_selection import train_test_split
 import json
 import os
 from datetime import datetime
@@ -12,7 +23,7 @@ moistures = []
 below_30 = []
 sensors = []
 
-
+#  take the path and load the data from json files
 for filename in os.listdir(directory_path):
     if filename.endswith(".json"):
         file_path = os.path.join(directory_path, filename)
@@ -78,7 +89,18 @@ df = pd.DataFrame({
     'time_since_last_below_threshold': time_since_last_below_threshold
 })
 
-# Display the resulting DataFrame
-print(df)
+# store the feature engineered data
+
 filename = f"../../sensors/data/processed/sensor_data_{datetime.now().date()}.csv"
-df.to_csv(filename, index=False)
+# df.to_csv(filename, index=False)
+
+# Create train and test data functionality
+
+def train_test_split_data(data, test_size=0.2, random_state=42):
+    train_data, test_data = train_test_split(data, test_size=test_size, random_state=random_state)
+    return train_data, test_data
+
+# Split data into training and testing sets
+train_data, test_data = train_test_split_data(df)
+
+print(train_data, test_data)

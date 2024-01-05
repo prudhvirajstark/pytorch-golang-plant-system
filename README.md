@@ -11,13 +11,13 @@ This repository contains the source code for a Smart Plant Watering System, an a
 
 ## Data Preprocessing:
 
-1. Load your JSON data into a suitable data structure (e.g., pandas DataFrame).
-2. Extract the relevant features (timestamp and moisture) for each sensor.
-3. Create a target variable indicating whether the moisture is below 30% for all sensors.
+1. Loaded your JSON data into a suitable data structure ( pandas DataFrame).
+2. Extracted the relevant features (timestamp and moisture) for each sensor.
+3. Created a target variable indicating whether the moisture is below 30% for all sensors.
 
 ## Feature Engineering:
 
-4. You may need to extract additional features from the timestamp, such as day of the week, hour of the day, etc., to improve the model's performance.
+4. Extracted additional features from the timestamp, such as day of the week, hour of the day to improve the model's performance.
 
 ## Train-Test Split:
 
