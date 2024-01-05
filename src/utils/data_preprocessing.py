@@ -50,6 +50,20 @@ for hour in hour_of_day:
     else:
         time_of_day_bins.append('evening')
 
+
+# Calculate time since the last occurrence of moisture below threshold
+time_since_last_below_threshold = []
+last_below_threshold_timestamp = None
+
+for timestamp, below_threshold in zip(timestamps, below_30):
+    if below_threshold == 1:
+        last_below_threshold_timestamp = timestamp
+
+    if last_below_threshold_timestamp is not None:
+        time_since_last_below_threshold.append((timestamp - last_below_threshold_timestamp).total_seconds())
+    else:
+        time_since_last_below_threshold.append(None)
+
 # Create a pandas DataFrame
 df = pd.DataFrame({
     'sensor': sensors,
@@ -60,7 +74,8 @@ df = pd.DataFrame({
     'hour_of_day': hour_of_day,
     'month': month,
     'year': year,
-    'time_of_day': time_of_day_bins
+    'time_of_day': time_of_day_bins,
+    'time_since_last_below_threshold': time_since_last_below_threshold
 })
 
 # Display the resulting DataFrame
